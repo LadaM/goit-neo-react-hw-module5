@@ -2,7 +2,6 @@ import { Suspense, useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 import tmdbApi, { imageBaseUrl } from '../api/tmdb';
 import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import css from './MovieDetailsPage.module.css';
 
 const MovieDetailsPage = () => {
@@ -18,11 +17,10 @@ const MovieDetailsPage = () => {
         setMovie(movieDetails);
         setLoading(false);
       } catch (error) {
-        toast.error('Error fetching movie details. Please try again.');
+        toast.error(`Error fetching movie details. Please try again. ${error.message}`);
         setLoading(false);
       }
     };
-
     fetchMovieDetails();
   }, [movieId]);
 

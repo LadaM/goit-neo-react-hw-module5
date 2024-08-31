@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import tmdbApi from '../api/tmdb';
 import { toast } from 'react-toastify';
@@ -7,6 +7,13 @@ const MovieReviews = () => {
   const { movieId } = useParams();
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [ref.current]);
 
   useEffect(() => {
     const fetchMovieReviews = async () => {
@@ -15,7 +22,7 @@ const MovieReviews = () => {
         setReviews(movieReviews);
         setLoading(false);
       } catch (error) {
-        toast.error('Error fetching movie reviews. Please try again.');
+        toast.error(`Error fetching movie reviews. Please try again. ${error.message}`);
         setLoading(false);
       }
     };
@@ -28,7 +35,7 @@ const MovieReviews = () => {
   }
 
   return (
-    <div>
+    <div id={'reviews'} ref={ref}>
       <h2>Reviews</h2>
       {reviews.length > 0 ? (
         <ul>
