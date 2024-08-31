@@ -24,7 +24,7 @@ a:hover {
 }
 
 body {
-    padding-top: 44px; /* compensate for header */
+    padding-top: 64px; /* compensate for header */
     margin: 0;
 }
 
