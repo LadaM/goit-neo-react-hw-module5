@@ -3,7 +3,6 @@ import css from './MovieList.module.css';
 import { imageBaseUrl } from '../api/tmdb.js';
 
 const MovieList = ({ movies }) => {
-  console.dir(movies);
   return (
     <ul className={css.movieList}>
       {movies.map(movie => (

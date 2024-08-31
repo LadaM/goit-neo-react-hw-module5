@@ -1,30 +1,41 @@
-import tmdbApi from '../api/tmdb.js';
-import { useEffect, useState } from 'react';
-import MovieList from '../components/MovieList.jsx';
+import React, { Suspense, useEffect, useState } from 'react';
+import tmdbApi from '../api/tmdb';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const MovieList = React.lazy(() => import('../components/MovieList'));
 
 const HomePage = () => {
-  const [popularMovies, setPopularMovies] = useState([]);
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-      const getMovies = async () => {
-        try {
-          const response = await tmdbApi.getPopularMovies();
-          setPopularMovies(response);
-          console.log(response);
-        } catch (error) {
-          console.error('Error fetching popular movies:', error);
-          throw error;
-        }
-      };
-      getMovies();
-    }, []); // loading movies on page load
+    const fetchPopularMovies = async () => {
+      try {
+        const popularMovies = await tmdbApi.getPopularMovies();
+        setMovies(popularMovies); // Update state directly
+        setLoading(false);        // Set loading to false after data is set
+      } catch (error) {
+        toast.error('Error fetching popular movies. Please try again.');
+        setLoading(false);        // Ensure loading is false even on error
+      }
+    };
+
+    fetchPopularMovies();
+  }, []);
+
   return (
-    <div>
-      <h1>Home Page</h1>
-      <div>
-        <h2>Popular Movies</h2>
-        <MovieList movies={popularMovies} />
-      </div>
-    </div>
+    <>
+      <h1>Popular Movies</h1>
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <Suspense fallback={<div>Loading movies...</div>}>
+          <MovieList movies={movies} />
+        </Suspense>
+      )}
+      <ToastContainer />
+    </>
   );
 };
 
