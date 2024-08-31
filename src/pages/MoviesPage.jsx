@@ -1,4 +1,5 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import tmdbApi from '../api/tmdb.js';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -6,25 +7,28 @@ import css from '../App.module.css';
 import MovieList from '../components/MovieList.jsx';
 
 const MoviesPage = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryFromUrl = searchParams.get('query') || '';
+  const [searchQuery, setSearchQuery] = useState(queryFromUrl);
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const searchMovies = useCallback(async () => {
+  const searchMovies = useCallback(async (query) => {
     setLoading(true);
-    if (searchQuery.trim()) {
+    if (query.trim()) {
       try {
-        const response = await tmdbApi.searchMovies(searchQuery);
+        const response = await tmdbApi.searchMovies(query);
         setMovies(response);
       } catch (error) {
-        toast.error('Error fetching movies. Please try again.');
+        toast.error(`Error fetching movies. Please try again. ${error.message}`);
       } finally {
         setLoading(false);
       }
     } else {
       toast.error('Search query cannot be empty.');
+      setLoading(false);
     }
-  }, [searchQuery]);
+  }, []);
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
@@ -36,9 +40,15 @@ const MoviesPage = () => {
       toast.error('Search query cannot be empty.');
       return;
     }
-    searchMovies();
-    setSearchQuery('');
+    setSearchParams({ query: searchQuery });
+    searchMovies(searchQuery);
   };
+
+  useEffect(() => {
+    if (queryFromUrl) {
+      searchMovies(queryFromUrl);
+    }
+  }, [queryFromUrl, searchMovies]);
 
   return (
     <>
@@ -53,7 +63,7 @@ const MoviesPage = () => {
         />
         <button type="submit" disabled={loading}>Search</button>
       </form>
-      {movies.length > 0 && (
+      {movies.length > 0 && !loading && (
         <MovieList movies={movies} />
       )}
       <ToastContainer />
