@@ -1,0 +1,39 @@
+.button {
+  margin-bottom: 20px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.poster {
+  width: 300px;
+  border-radius: 8px;
+}
+
+.details {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.links {
+  list-style-type: none;
+  display: flex;
+  gap: 20px;
+  padding: unset;
+  margin: unset;
+  justify-content: center;
+}
+
+.linkItem {
+  margin-bottom: 10px;
+}
