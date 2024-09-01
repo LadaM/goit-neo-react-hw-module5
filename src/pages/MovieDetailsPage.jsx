@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
 import tmdbApi, { imageBaseUrl } from '../api/tmdb';
 import { toast, ToastContainer } from 'react-toastify';
@@ -9,7 +9,7 @@ const MovieDetailsPage = () => {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
-  const backRef = location.state ?? '/movies';
+  const backRef = useRef(location.state ?? '/movies');
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
