@@ -12,7 +12,7 @@ const MovieCast = () => {
   useEffect(() => {
     if (castRef.current)
       castRef.current.scrollIntoView({ behavior: 'smooth' });
-  });
+  }, []);
 
   useEffect(() => {
     const fetchMovieCast = async () => {

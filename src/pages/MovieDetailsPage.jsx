@@ -9,7 +9,8 @@ const MovieDetailsPage = () => {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
-  const backRef = useRef(location.state ?? '/movies');
+  const locationStateRef = useRef(location.state);
+  const backRef = locationStateRef.current === null ? '/movies' : locationStateRef.current;
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
