@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useState } from 'react';
-import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
+import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
 import tmdbApi, { imageBaseUrl } from '../api/tmdb';
 import { toast, ToastContainer } from 'react-toastify';
 import css from './MovieDetailsPage.module.css';
@@ -8,7 +8,8 @@ const MovieDetailsPage = () => {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const location = useLocation();
+  const backRef = location.state ?? '/movies';
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -24,13 +25,8 @@ const MovieDetailsPage = () => {
     fetchMovieDetails();
   }, [movieId]);
 
-  const handleGoBack = () => {
-    navigate(-1);
-  };
-
   return (
     <>
-      <button onClick={handleGoBack} className={css.button}>Go Back</button>
       {loading ? (
         <div>Loading...</div>
       ) : (
@@ -47,6 +43,9 @@ const MovieDetailsPage = () => {
               <h2>{movie.title}</h2>
               <p>{movie.overview}</p>
               <ul className={css.links}>
+                <li>
+                  <Link to={backRef}><span>← </span>Go Back</Link>
+                </li>
                 <li className={css.linkItem}>
                   <Link to={`/movies/${movieId}/cast`}>Cast</Link>
                 </li>

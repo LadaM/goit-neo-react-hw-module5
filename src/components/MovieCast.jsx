@@ -7,15 +7,12 @@ const MovieCast = () => {
   const { movieId } = useParams();
   const [cast, setCast] = useState([]);
   const [loading, setLoading] = useState(true);
-  const ref = useRef(null);
+  const castRef = useRef(null);
 
   useEffect(() => {
-    if (ref.current) {
-      if (ref.current) {
-        ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    }
-  }, [ref.current]);
+    if (castRef.current)
+      castRef.current.scrollIntoView({ behavior: 'smooth' });
+  });
 
   useEffect(() => {
     const fetchMovieCast = async () => {
@@ -37,11 +34,11 @@ const MovieCast = () => {
   }
 
   return (
-    <div id={'cast'} ref={ref}>
+    <>
       {cast.length === 0 ? (
         <p>No cast information available.</p>
       ) : (
-        <>
+        <div id={'cast'} ref={castRef}>
           <h2>Cast</h2>
           <ul>
             {cast.map(actor => (
@@ -50,9 +47,9 @@ const MovieCast = () => {
               </li>
             ))}
           </ul>
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 

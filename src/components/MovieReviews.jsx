@@ -11,9 +11,9 @@ const MovieReviews = () => {
 
   useEffect(() => {
     if (ref.current) {
-      ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      ref.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [ref.current]);
+  }, []);
 
   useEffect(() => {
     const fetchMovieReviews = async () => {
